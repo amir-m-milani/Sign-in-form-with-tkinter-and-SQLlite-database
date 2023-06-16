@@ -1,3 +1,5 @@
 
 __pycache__/add_menu.cpython-310.pyc
 .vscode/settings.json
+*.pyc
+users.db
