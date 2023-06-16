@@ -1,5 +1,5 @@
 import tkinter
-from add_menu import *
+from menus import *
 
 # Main window
 main_menu = tkinter.Tk()
