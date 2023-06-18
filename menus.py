@@ -4,12 +4,27 @@ from SQLConnect import *
 
 # Add User
 def add_user(id: str, fName: str, lName: str, sexuality: bool, age: str, salary: str, weight: str):
-    if id.isnumeric() and fName.isalpha() and lName.isalpha() and age.isnumeric() and salary.__contains__("$") and weight.isnumeric():
-        connection = SQLConnect("users")
+    connection = SQLConnect("users")
+    # check all the problems
+    errors = []
+    if not id.isnumeric():
+        errors.append(f"change your id : {id}")
+    if not fName.isalpha():
+        errors.append(f"{fName} is wrong")
+    if not lName.isalpha():
+        errors.append(f"{lName} is wrong")
+    if not age.isnumeric():
+        errors.append(f"{age} must be numbers")
+    if not salary.isnumeric():
+        errors.append(f"{salary} is not numbers!")
+    if not weight.isnumeric():
+        errors.append("weight should be numbers")
+    if len(errors) == 0:
         connection.sql_query(
-            f"INSERT INTO users VALUES({int(id)},'{fName}','{lName}',{int(age)},'{salary}',{float(weight)})")
+            f"INSERT INTO users VALUES({int(id)},'{fName}','{lName}','{sexuality}',{int(age)},'{salary}',{float(weight)})")
     else:
-        print("An Error has occured!")
+        for error in errors:
+            print(error)
 
 
 # Add window
@@ -21,8 +36,23 @@ def open_add_menu():
     add_menu.geometry("250x300")
     add_menu.title("Add user")
     add_labels(add_menu)
-    add_text_box(add_menu)
-    add_button(add_menu, "ثبت نام", "1")
+    # add_text_box(add_menu)
+    id_person = tkinter.Entry(add_menu, width=20)
+    first_name = tkinter.Entry(add_menu, width=20)
+    last_name = tkinter.Entry(add_menu, width=20)
+    age = tkinter.Entry(add_menu, width=20)
+    weight = tkinter.Entry(add_menu, width=20)
+    salary = tkinter.Entry(add_menu, width=20)
+    # gird
+    id_person.grid(row=0, column=1, columnspan=2)
+    first_name.grid(row=1, column=1, columnspan=2)
+    last_name.grid(row=2, column=1, columnspan=2)
+    age.grid(row=4, column=1, columnspan=2)
+    weight.grid(row=5, column=1, columnspan=2)
+    salary.grid(row=6, column=1, columnspan=2)
+    add_button(add_menu, "ثبت نام", lambda: add_user(id=id_person.get(), fName=first_name.get(
+    ), lName=last_name.get(), sexuality=0, age=age.get(), salary=salary.get(), weight=weight.get()))
+
     add_menu.mainloop()
     connection.close()
 
@@ -32,7 +62,7 @@ def edit_add_menu():
     edit_menu.geometry("250x300")
     edit_menu.title("Edit user")
     add_labels(edit_menu)
-    add_text_box(edit_menu)
+    # add_text_box(edit_menu)
     add_button(edit_menu, "ویرایش", lambda: print('hello world'))
     edit_menu.mainloop()
 
@@ -60,6 +90,7 @@ def add_labels(menu: tkinter.Tk) -> None:
     salary.grid(row=6, column=0)
 
 
+"""
 def add_text_box(menu: tkinter.Tk) -> None:
     id_person = tkinter.Entry(menu, width=20)
     first_name = tkinter.Entry(menu, width=20)
@@ -74,6 +105,7 @@ def add_text_box(menu: tkinter.Tk) -> None:
     age.grid(row=4, column=1, columnspan=2)
     weight.grid(row=5, column=1, columnspan=2)
     salary.grid(row=6, column=1, columnspan=2)
+"""
 
 
 def add_button(menu: tkinter.Tk, title: str, function) -> None:
