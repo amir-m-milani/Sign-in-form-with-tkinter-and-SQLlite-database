@@ -41,7 +41,7 @@ def edit_user(id: str, fName: str, lName: str, sexuality: bool, age: str, salary
     errors = []
     id_list: list = connection.select_query(
         f"SELECT id FROM users WHERE id={int(id)}")
-    if id.isnumeric() and int(id) == id_list[0][0]:
+    if id.isnumeric() and len(id_list) != 0:
         if not fName == "":
             if fName.isalpha():
                 connection.sql_query(
