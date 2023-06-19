@@ -39,20 +39,33 @@ def add_user(id: str, fName: str, lName: str, sexuality: bool, age: str, salary:
 def edit_user(id: str, fName: str, lName: str, sexuality: bool, age: str, salary: str, weight: str):
     connection = SQLConnect("users")
     errors = []
-    success = []
     id_list: list = connection.select_query(
         f"SELECT id FROM users WHERE id={int(id)}")
-    if id.isnumeric() and id == id_list[0][0]:
-        success.append(fName) if fName.isalpha() and fName != "" else errors.append(
-            "Your first name should be alphabets")
-        success.append(lName) if lName.isalpha() and lName != "" else errors.append(
-            "Your last name should be alphabets")
-        success.append(age) if age.isnumeric() and age != "" else errors.append(
-            "Your age should be numbers")
-        success.append(salary) if salary.isnumeric() and salary != "" else errors.append(
-            "Your salary should be numbers")
-        success.append(weight) if weight.isnumeric() and weight != "" else errors.append(
-            "Your weight should be numbers")
+    if id.isnumeric() and int(id) == id_list[0][0]:
+        if not fName == "":
+            if fName.isalpha():
+                connection.sql_query(
+                    f"UPDATE users SET first_name = '{fName}' WHERE id = '{int(id)}'")
+        if not lName == "":
+            if lName.isalpha():
+                connection.sql_query(
+                    f"UPDATE users SET last_name = '{lName}' WHERE id = {int(id)}")
+        if not sexuality == " ":
+            connection.sql_query(
+                f"UPDATE users SET sexuality = '{sexuality}' WHERE id = {int(id)}")
+        if not age == "":
+            if age.isnumeric():
+                connection.sql_query(
+                    f"UPDATE users SET age = {int(age)} WHERE id = {int(id)}")
+        if not salary == "":
+            if salary.isnumeric():
+                connection.sql_query(
+                    f"UPDATE users SET salary = {salary} WHERE id = {int(id)}")
+        if not weight == "":
+            if weight.isnumeric():
+                connection.sql_query(
+                    f"UPDATE users SET weight = {weight} WHERE id = {int(id)}")
+
     else:
         errors.append("id has not been found!")
     if len(errors) != 0:
@@ -91,6 +104,7 @@ def open_add_menu():
     salary.grid(row=6, column=1, columnspan=2)
     #####################
     sexuality = tkinter.StringVar(add_menu)
+    sexuality.set("1")
     man = tkinter.Radiobutton(add_menu, text="مرد",
                               variable=sexuality, value="1")
     woman = tkinter.Radiobutton(
@@ -127,6 +141,7 @@ def edit_add_menu():
     salary.grid(row=6, column=1, columnspan=2)
     #####################
     sexuality = tkinter.StringVar(edit_menu)
+    sexuality.set(" ")
     man = tkinter.Radiobutton(edit_menu, text="مرد",
                               variable=sexuality, value="1")
     woman = tkinter.Radiobutton(
