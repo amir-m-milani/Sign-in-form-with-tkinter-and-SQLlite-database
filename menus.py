@@ -3,27 +3,33 @@ from SQLConnect import *
 
 
 # Add User
-def add_user(id: str, fName: str, lName: str, sexuality: bool, age: str, salary: str, weight: str):
+def add_user(id: tkinter.Entry, fName: tkinter.Entry, lName: tkinter.Entry, sexuality: tkinter.Entry, age: tkinter.Entry, salary: tkinter.Entry, weight: tkinter.Entry):
     connection = SQLConnect("users")
     # check all the problems
     errors = []
-    if not id.isnumeric():
+    if not id.get().isnumeric():
         errors.append("ID should be numbers")
-    if not fName.isalpha():
+    if not fName.get().isalpha():
         errors.append("Change your name.should be alphabet")
-    if not lName.isalpha():
+    if not lName.get().isalpha():
         errors.append("Change your last name.should be alphabet")
-    if not age.isnumeric():
+    if not age.get().isnumeric():
         errors.append("age must be numbers")
-    if not salary.isnumeric():
+    if not salary.get().isnumeric():
         errors.append("salary must be numbers!")
-    if not weight.isnumeric():
+    if not weight.get().isnumeric():
         errors.append("weight should be numbers")
     if len(errors) == 0:
         try:
             connection.sql_query(
-                f"INSERT INTO users VALUES({int(id)},'{fName}','{lName}','{sexuality}',{int(age)},'{salary}',{float(weight)})")
+                f"INSERT INTO users VALUES({int(id.get())},'{fName.get()}','{lName.get()}','{sexuality.get()}',{int(age.get())},'{salary.get()}',{float(weight.get())})")
             print("your user has been add!")
+            clear_textbox(id)
+            clear_textbox(fName)
+            clear_textbox(lName)
+            clear_textbox(age)
+            clear_textbox(salary)
+            clear_textbox(weight)
         except sqlite3.IntegrityError:
             print("Your id isnot Unique")
     else:
@@ -124,8 +130,8 @@ def open_add_menu():
     man.grid(row=3, column=1)
     woman.grid(row=3, column=2)
     #####################
-    add_button(add_menu, "ثبت نام", lambda: add_user(id=id_person.get(), fName=first_name.get(
-    ), lName=last_name.get(), sexuality=sexuality.get(), age=age.get(), salary=salary.get(), weight=weight.get()))
+    add_button(add_menu, "ثبت نام", lambda: add_user(id=id_person, fName=first_name,
+               lName=last_name, sexuality=sexuality, age=age, salary=salary, weight=weight))
 
     add_menu.mainloop()
     connection.close()
@@ -210,3 +216,7 @@ def add_text_box(menu: tkinter.Tk) -> None:
 def add_button(menu: tkinter.Tk, title: str, function) -> None:
     submit_btn = tkinter.Button(menu, text=title, command=function)
     submit_btn.grid(row=7, column=0, columnspan=2)
+
+
+def clear_textbox(textbox: tkinter.Entry):
+    textbox.delete(0, tkinter.END)
