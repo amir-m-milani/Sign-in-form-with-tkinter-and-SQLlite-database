@@ -34,6 +34,36 @@ def add_user(id: str, fName: str, lName: str, sexuality: bool, age: str, salary:
             test = tkinter.Label(error_window, text=error)
             test.grid(row=index, column=0)
         error_window.mainloop()
+
+
+def edit_user(id: str, fName: str, lName: str, sexuality: bool, age: str, salary: str, weight: str):
+    connection = SQLConnect("users")
+    errors = []
+    success = []
+    id_list: list = connection.select_query(
+        f"SELECT id FROM users WHERE id={int(id)}")
+    if id.isnumeric() and id == id_list[0][0]:
+        success.append(fName) if fName.isalpha() and fName != "" else errors.append(
+            "Your first name should be alphabets")
+        success.append(lName) if lName.isalpha() and lName != "" else errors.append(
+            "Your last name should be alphabets")
+        success.append(age) if age.isnumeric() and age != "" else errors.append(
+            "Your age should be numbers")
+        success.append(salary) if salary.isnumeric() and salary != "" else errors.append(
+            "Your salary should be numbers")
+        success.append(weight) if weight.isnumeric() and weight != "" else errors.append(
+            "Your weight should be numbers")
+    else:
+        errors.append("id has not been found!")
+    if len(errors) != 0:
+        error_window = tkinter.Tk()
+        error_window.geometry("250x250")
+        error_window.title("ERRORS")
+        for index, error in enumerate(errors):
+            test = tkinter.Label(error_window, text=error)
+            test.grid(row=index, column=0)
+        error_window.mainloop()
+
 # Add window
 
 
@@ -67,6 +97,7 @@ def open_add_menu():
         add_menu, text="زن", variable=sexuality, value="0")
     man.grid(row=3, column=1)
     woman.grid(row=3, column=2)
+    #####################
     add_button(add_menu, "ثبت نام", lambda: add_user(id=id_person.get(), fName=first_name.get(
     ), lName=last_name.get(), sexuality=sexuality.get(), age=age.get(), salary=salary.get(), weight=weight.get()))
 
@@ -79,8 +110,32 @@ def edit_add_menu():
     edit_menu.geometry("250x300")
     edit_menu.title("Edit user")
     add_labels(edit_menu)
-    # add_text_box(edit_menu)
-    add_button(edit_menu, "ویرایش", lambda: print('hello world'))
+
+    # add_text_box(add_menu)
+    id_person = tkinter.Entry(edit_menu, width=20)
+    first_name = tkinter.Entry(edit_menu, width=20)
+    last_name = tkinter.Entry(edit_menu, width=20)
+    age = tkinter.Entry(edit_menu, width=20)
+    weight = tkinter.Entry(edit_menu, width=20)
+    salary = tkinter.Entry(edit_menu, width=20)
+    # gird
+    id_person.grid(row=0, column=1, columnspan=2)
+    first_name.grid(row=1, column=1, columnspan=2)
+    last_name.grid(row=2, column=1, columnspan=2)
+    age.grid(row=4, column=1, columnspan=2)
+    weight.grid(row=5, column=1, columnspan=2)
+    salary.grid(row=6, column=1, columnspan=2)
+    #####################
+    sexuality = tkinter.StringVar(edit_menu)
+    man = tkinter.Radiobutton(edit_menu, text="مرد",
+                              variable=sexuality, value="1")
+    woman = tkinter.Radiobutton(
+        edit_menu, text="زن", variable=sexuality, value="0")
+    man.grid(row=3, column=1)
+    woman.grid(row=3, column=2)
+    #####################
+    add_button(edit_menu, "ثبت نام", lambda: edit_user(id=id_person.get(), fName=first_name.get(
+    ), lName=last_name.get(), sexuality=sexuality.get(), age=age.get(), salary=salary.get(), weight=weight.get()))
     edit_menu.mainloop()
 
 
