@@ -8,26 +8,35 @@ def add_user(id: str, fName: str, lName: str, sexuality: bool, age: str, salary:
     # check all the problems
     errors = []
     if not id.isnumeric():
-        errors.append(f"change your id : {id}")
+        errors.append("ID should be numbers")
     if not fName.isalpha():
-        errors.append(f"{fName} is wrong")
+        errors.append("Change your name.should be alphabet")
     if not lName.isalpha():
-        errors.append(f"{lName} is wrong")
+        errors.append("Change your last name.should be alphabet")
     if not age.isnumeric():
-        errors.append(f"{age} must be numbers")
+        errors.append("age must be numbers")
     if not salary.isnumeric():
-        errors.append(f"{salary} is not numbers!")
+        errors.append("salary must be numbers!")
     if not weight.isnumeric():
         errors.append("weight should be numbers")
     if len(errors) == 0:
-        connection.sql_query(
-            f"INSERT INTO users VALUES({int(id)},'{fName}','{lName}','{sexuality}',{int(age)},'{salary}',{float(weight)})")
+        try:
+            connection.sql_query(
+                f"INSERT INTO users VALUES({int(id)},'{fName}','{lName}','{sexuality}',{int(age)},'{salary}',{float(weight)})")
+            print("your user has been add!")
+        except sqlite3.IntegrityError:
+            print("Your id isnot Unique")
     else:
-        for error in errors:
-            print(error)
-
-
+        error_window = tkinter.Tk()
+        error_window.geometry("250x250")
+        error_window.title("ERRORS")
+        for index, error in enumerate(errors):
+            test = tkinter.Label(error_window, text=error)
+            test.grid(row=index, column=0)
+        error_window.mainloop()
 # Add window
+
+
 def open_add_menu():
     connection = SQLConnect("users")
     connection.sql_query(
@@ -50,8 +59,16 @@ def open_add_menu():
     age.grid(row=4, column=1, columnspan=2)
     weight.grid(row=5, column=1, columnspan=2)
     salary.grid(row=6, column=1, columnspan=2)
+    #####################
+    sexuality = tkinter.StringVar(add_menu)
+    man = tkinter.Radiobutton(add_menu, text="مرد",
+                              variable=sexuality, value="1")
+    woman = tkinter.Radiobutton(
+        add_menu, text="زن", variable=sexuality, value="0")
+    man.grid(row=3, column=1)
+    woman.grid(row=3, column=2)
     add_button(add_menu, "ثبت نام", lambda: add_user(id=id_person.get(), fName=first_name.get(
-    ), lName=last_name.get(), sexuality=0, age=age.get(), salary=salary.get(), weight=weight.get()))
+    ), lName=last_name.get(), sexuality=sexuality.get(), age=age.get(), salary=salary.get(), weight=weight.get()))
 
     add_menu.mainloop()
     connection.close()
@@ -71,9 +88,9 @@ def add_labels(menu: tkinter.Tk) -> None:
     id_person = tkinter.Label(menu, text="شناسه:")
     first_name = tkinter.Label(menu, text="نام")
     last_name = tkinter.Label(menu, text="نام خانوادگی:")
-    sexual = tkinter.StringVar(menu)
-    man = tkinter.Radiobutton(menu, text="مرد", value="1")
-    woman = tkinter.Radiobutton(menu, text="زن", value="0")
+    # sexual = tkinter.StringVar(menu)
+    # man = tkinter.Radiobutton(menu, text="مرد", value="1")
+    # woman = tkinter.Radiobutton(menu, text="زن", value="0")
     sexual = tkinter.Label(menu, text="جنسیت")
     age = tkinter.Label(menu, text="سن")
     weight = tkinter.Label(menu, text="وزن")
@@ -83,8 +100,8 @@ def add_labels(menu: tkinter.Tk) -> None:
     first_name.grid(row=1, column=0)
     last_name.grid(row=2, column=0)
     sexual.grid(row=3, column=0)
-    man.grid(row=3, column=1)
-    woman.grid(row=3, column=2)
+    # man.grid(row=3, column=1)
+    # woman.grid(row=3, column=2)
     age.grid(row=4, column=0)
     weight.grid(row=5, column=0)
     salary.grid(row=6, column=0)

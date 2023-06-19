@@ -15,3 +15,7 @@ class SQLConnect:
 
     def close(self):
         self.connection.close()
+
+    def select_query(self, query: str) -> list:
+        self.cur.execute(query)
+        return self.cur.fetchall()
