@@ -1,5 +1,5 @@
 import tkinter
-from tkinter_func import add_button, add_labels, clear_textbox
+from tkinter_func import add_button, add_labels, clear_textbox, add_textbox
 import sqlite3
 
 connection: sqlite3.connect = sqlite3.connect("users.db")
@@ -55,30 +55,9 @@ def AddMenu():
     add_menu.geometry("250x300")
     add_menu.title("Add user")
     add_labels(add_menu)
-    # add_text_box(add_menu)
-    id_person = tkinter.Entry(add_menu, width=20)
-    first_name = tkinter.Entry(add_menu, width=20)
-    last_name = tkinter.Entry(add_menu, width=20)
-    age = tkinter.Entry(add_menu, width=20)
-    weight = tkinter.Entry(add_menu, width=20)
-    salary = tkinter.Entry(add_menu, width=20)
-    # gird
-    id_person.grid(row=0, column=1, columnspan=2)
-    first_name.grid(row=1, column=1, columnspan=2)
-    last_name.grid(row=2, column=1, columnspan=2)
-    age.grid(row=4, column=1, columnspan=2)
-    weight.grid(row=5, column=1, columnspan=2)
-    salary.grid(row=6, column=1, columnspan=2)
-    #####################
-    sexuality = tkinter.StringVar(add_menu)
-    sexuality.set("1")
-    man = tkinter.Radiobutton(add_menu, text="مرد",
-                              variable=sexuality, value="1")
-    woman = tkinter.Radiobutton(
-        add_menu, text="زن", variable=sexuality, value="0")
-    man.grid(row=3, column=1)
-    woman.grid(row=3, column=2)
-    #####################
+    # Add all the text box
+    [id_person, first_name, last_name, sexuality,
+        age, weight, salary] = add_textbox(add_menu, True)
     add_button(add_menu, "ثبت نام", lambda: add_user(user_id=id_person, fName=first_name,
                lName=last_name, sexuality=sexuality, age=age, salary=salary, weight=weight))
     add_menu.mainloop()

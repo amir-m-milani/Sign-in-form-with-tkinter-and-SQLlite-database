@@ -1,5 +1,5 @@
 import tkinter
-from tkinter_func import add_button, add_labels
+from tkinter_func import add_button, add_labels, add_textbox
 import sqlite3
 
 connection: sqlite3.connect = sqlite3.connect("users.db")
@@ -64,31 +64,9 @@ def EditMenu():
     edit_menu.geometry("250x300")
     edit_menu.title("Edit user")
     add_labels(edit_menu)
-
-    # add_text_box(add_menu)
-    id_person = tkinter.Entry(edit_menu, width=20)
-    first_name = tkinter.Entry(edit_menu, width=20)
-    last_name = tkinter.Entry(edit_menu, width=20)
-    age = tkinter.Entry(edit_menu, width=20)
-    weight = tkinter.Entry(edit_menu, width=20)
-    salary = tkinter.Entry(edit_menu, width=20)
-    # gird
-    id_person.grid(row=0, column=1, columnspan=2)
-    first_name.grid(row=1, column=1, columnspan=2)
-    last_name.grid(row=2, column=1, columnspan=2)
-    age.grid(row=4, column=1, columnspan=2)
-    weight.grid(row=5, column=1, columnspan=2)
-    salary.grid(row=6, column=1, columnspan=2)
-    #####################
-    sexuality = tkinter.StringVar(edit_menu)
-    sexuality.set(" ")
-    man = tkinter.Radiobutton(edit_menu, text="مرد",
-                              variable=sexuality, value="1")
-    woman = tkinter.Radiobutton(
-        edit_menu, text="زن", variable=sexuality, value="0")
-    man.grid(row=3, column=1)
-    woman.grid(row=3, column=2)
-    #####################
+    # Add text boxes
+    [id_person, first_name, last_name, sexuality,
+        age, weight, salary] = add_textbox(edit_menu, add_menu=False)
     add_button(edit_menu, "ثبت نام", lambda: edit_user(
         user_id=id_person.get(), fName=first_name.get(), lName=last_name.get(), sexuality=sexuality.get(), age=age.get(), salary=salary.get(), weight=weight.get()))
     edit_menu.mainloop()
