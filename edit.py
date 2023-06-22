@@ -6,7 +6,7 @@ connection: sqlite3.connect = sqlite3.connect("users.db")
 cur = connection.cursor()
 
 
-def edit_user(user_id: str, fName: str, lName: str, sexuality: bool, age: str, salary: str, weight: str):
+def edit_user(user_id: str, fName: str, lName: str, sexuality: bool, age: str, salary: str, height: str):
     errors = []
     cur.execute("SELECT id FROM users WHERE id=?", int(user_id))
     id_list: list = cur.fetchall()
@@ -40,12 +40,12 @@ def edit_user(user_id: str, fName: str, lName: str, sexuality: bool, age: str, s
                     f"UPDATE users SET salary = {salary} WHERE id = {int(id)}")
             else:
                 errors.append("salary must be numbers")
-        if not weight == "":
-            if weight.isnumeric():
+        if not height == "":
+            if height.isnumeric():
                 connection.sql_query(
-                    f"UPDATE users SET weight = {weight} WHERE id = {int(id)}")
+                    f"UPDATE users SET height = {height} WHERE id = {int(id)}")
             else:
-                errors.append("weight should be numbers")
+                errors.append("height should be numbers")
 
     else:
         errors.append("id has not been found!")
@@ -66,7 +66,7 @@ def EditMenu():
     add_labels(edit_menu)
     # Add text boxes
     [id_person, first_name, last_name, sexuality,
-        age, weight, salary] = add_textbox(edit_menu, add_menu=False)
+        age, height, salary] = add_textbox(edit_menu, add_menu=False)
     add_button(edit_menu, "ثبت نام", lambda: edit_user(
-        user_id=id_person.get(), fName=first_name.get(), lName=last_name.get(), sexuality=sexuality.get(), age=age.get(), salary=salary.get(), weight=weight.get()))
+        user_id=id_person.get(), fName=first_name.get(), lName=last_name.get(), sexuality=sexuality.get(), age=age.get(), salary=salary.get(), height=height.get()))
     edit_menu.mainloop()

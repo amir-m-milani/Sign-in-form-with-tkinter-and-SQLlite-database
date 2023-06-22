@@ -7,7 +7,7 @@ def add_labels(menu: tkinter.Tk) -> None:
     last_name = tkinter.Label(menu, text="نام خانوادگی:")
     sexual = tkinter.Label(menu, text="جنسیت")
     age = tkinter.Label(menu, text="سن")
-    weight = tkinter.Label(menu, text="وزن")
+    height = tkinter.Label(menu, text="قد")
     salary = tkinter.Label(menu, text="درآمد")
     # gird
     id_person.grid(row=0, column=0)
@@ -15,7 +15,7 @@ def add_labels(menu: tkinter.Tk) -> None:
     last_name.grid(row=2, column=0)
     sexual.grid(row=3, column=0)
     age.grid(row=4, column=0)
-    weight.grid(row=5, column=0)
+    height.grid(row=5, column=0)
     salary.grid(row=6, column=0)
 
 
@@ -34,14 +34,14 @@ def add_textbox(menu: tkinter.Tk, add_menu: bool) -> list:
     first_name = tkinter.Entry(menu, width=20)
     last_name = tkinter.Entry(menu, width=20)
     age = tkinter.Entry(menu, width=20)
-    weight = tkinter.Entry(menu, width=20)
+    height = tkinter.Entry(menu, width=20)
     salary = tkinter.Entry(menu, width=20)
     # gird
     id_person.grid(row=0, column=1, columnspan=2)
     first_name.grid(row=1, column=1, columnspan=2)
     last_name.grid(row=2, column=1, columnspan=2)
     age.grid(row=4, column=1, columnspan=2)
-    weight.grid(row=5, column=1, columnspan=2)
+    height.grid(row=5, column=1, columnspan=2)
     salary.grid(row=6, column=1, columnspan=2)
     #####################
     sexuality = tkinter.StringVar(menu)
@@ -54,4 +54,4 @@ def add_textbox(menu: tkinter.Tk, add_menu: bool) -> list:
     woman.grid(row=3, column=2)
     #####################
     del test
-    return [id_person, first_name, last_name,  sexuality, age, weight, salary]
+    return [id_person, first_name, last_name,  sexuality, age, height, salary]

@@ -6,7 +6,7 @@ connection: sqlite3.connect = sqlite3.connect("users.db")
 cur: sqlite3.Cursor = connection.cursor()
 
 
-def add_user(user_id: tkinter.Entry, fName: tkinter.Entry, lName: tkinter.Entry, sexuality: tkinter.Entry, age: tkinter.Entry, salary: tkinter.Entry, weight: tkinter.Entry):
+def add_user(user_id: tkinter.Entry, fName: tkinter.Entry, lName: tkinter.Entry, sexuality: tkinter.Entry, age: tkinter.Entry, salary: tkinter.Entry, height: tkinter.Entry):
     # check all the problems
     errors = []
     test = errors.append(
@@ -19,17 +19,20 @@ def add_user(user_id: tkinter.Entry, fName: tkinter.Entry, lName: tkinter.Entry,
         "age must be numbers") if not age.get().isnumeric() else None
     test = errors.append(
         "salary must be numbers!") if not salary.get().isnumeric() else None
-    test = errors.append(
-        "weight should be numbers") if not weight.get().isnumeric() else None
+    try:
+        user_height: str = height.get()
+        user_height = float(user_height)
+    except ValueError:
+        errors.append("weight should be numbers and Meter")
     del test
     # Check if all the text box are ok
     if len(errors) == 0:
         try:
             cur.execute("INSERT INTO users VALUES(?,?,?,?,?,?,?)", [int(user_id.get()), fName.get(
-            ), lName.get(), sexuality.get(), int(age.get()), salary.get(), float(weight.get())])
+            ), lName.get(), sexuality.get(), int(age.get()), salary.get(), user_height])
             connection.commit()
-            for tesxbox in [user_id, fName, lName, age, salary, weight]:
-                clear_textbox(tesxbox)
+            for textbox in [user_id, fName, lName, age, salary, height]:
+                clear_textbox(textbox)
         except sqlite3.IntegrityError:
             error_window = tkinter.Tk()
             error_window.geometry("250x250")
@@ -49,7 +52,7 @@ def add_user(user_id: tkinter.Entry, fName: tkinter.Entry, lName: tkinter.Entry,
 
 def AddMenu():
     cur.execute(
-        "CREATE TABLE IF NOT EXISTS users(id INT PRIMARY KEY UNIQUE,first_name TEXT,last_name TEXT,sexuality BLOB,age INT,salary TEXT,weight NUMERIC)")
+        "CREATE TABLE IF NOT EXISTS users(id INT PRIMARY KEY UNIQUE,first_name TEXT,last_name TEXT,sexuality BLOB,age INT,salary TEXT,height REAL)")
     connection.commit()
     add_menu = tkinter.Tk()
     add_menu.geometry("250x300")
@@ -57,8 +60,8 @@ def AddMenu():
     add_labels(add_menu)
     # Add all the text box
     [id_person, first_name, last_name, sexuality,
-        age, weight, salary] = add_textbox(add_menu, True)
+        age, height, salary] = add_textbox(add_menu, True)
     add_button(add_menu, "ثبت نام", lambda: add_user(user_id=id_person, fName=first_name,
-               lName=last_name, sexuality=sexuality, age=age, salary=salary, weight=weight))
+               lName=last_name, sexuality=sexuality, age=age, salary=salary, height=height))
     add_menu.mainloop()
     connection.close()
